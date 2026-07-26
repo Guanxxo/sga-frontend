@@ -9,6 +9,7 @@ function Navbar({ paginaActual, setPagina }) {
     { id: 'matriculas', label: '📋 Matrículas' },
     { id: 'calificaciones', label: '📝 Calificaciones' },
     { id: 'asistencias', label: '✅ Asistencias' },
+    { id: 'estadisticas', label: '📈 Estadísticas' },
   ];
 
   return (

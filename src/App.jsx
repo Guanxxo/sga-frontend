@@ -9,6 +9,7 @@ import Materias from './pages/Materias';
 import Matriculas from './pages/Matriculas';
 import Calificaciones from './pages/Calificaciones';
 import Asistencias from './pages/Asistencias';
+import Estadisticas from './pages/Estadisticas';
 
 function App() {
   const [pagina, setPagina] = useState('dashboard');
@@ -24,6 +25,7 @@ function App() {
       case 'matriculas': return <Matriculas />;
       case 'calificaciones': return <Calificaciones />;
       case 'asistencias': return <Asistencias />;
+      case 'estadisticas': return <Estadisticas />;
       default: return <Dashboard />;
     }
   };
