@@ -3,6 +3,7 @@ import { getUsuarios, createUsuario, deleteUsuario } from '../services/api';
 
 function Usuarios() {
   const [usuarios, setUsuarios] = useState([]);
+  const [busqueda, setBusqueda] = useState('');
   const [form, setForm] = useState({ nombre: '', apellido: '', email: '', rol: 'estudiante' });
   const [error, setError] = useState('');
   const [exito, setExito] = useState('');
@@ -24,6 +25,12 @@ function Usuarios() {
     deleteUsuario(id).then(() => cargar()).catch(() => setError('Error al eliminar usuario'));
   };
 
+  const usuariosFiltrados = usuarios.filter(u =>
+    u.nombre.toLowerCase().includes(busqueda.toLowerCase()) ||
+    u.apellido.toLowerCase().includes(busqueda.toLowerCase()) ||
+    u.email.toLowerCase().includes(busqueda.toLowerCase())
+  );
+
   return (
     <div style={styles.container}>
       <h2>👤 Usuarios</h2>
@@ -43,6 +50,15 @@ function Usuarios() {
         <button style={styles.btnPrimary} onClick={handleSubmit}>Crear Usuario</button>
       </div>
 
+      <input
+        style={{...styles.input, marginBottom: '15px', width: '300px'}}
+        placeholder="🔍 Buscar por nombre, apellido o email..."
+        value={busqueda}
+        onChange={e => setBusqueda(e.target.value)}
+      />
+
+      <p style={styles.contador}>Total: {usuariosFiltrados.length} usuarios</p>
+
       <table style={styles.tabla}>
         <thead>
           <tr>
@@ -50,13 +66,13 @@ function Usuarios() {
           </tr>
         </thead>
         <tbody>
-          {usuarios.map(u => (
+          {usuariosFiltrados.map(u => (
             <tr key={u.id}>
               <td>{u.id}</td>
               <td>{u.nombre}</td>
               <td>{u.apellido}</td>
               <td>{u.email}</td>
-              <td>{u.rol}</td>
+              <td><span style={{...styles.badge, backgroundColor: u.rol === 'admin' ? '#4f46e5' : u.rol === 'docente' ? '#059669' : '#0891b2'}}>{u.rol}</span></td>
               <td>
                 <button style={styles.btnDanger} onClick={() => handleDelete(u.id)}>Eliminar</button>
               </td>
@@ -70,13 +86,15 @@ function Usuarios() {
 
 const styles = {
   container: { padding: '20px' },
-  error: { color: 'red', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '8px' },
-  exito: { color: 'green', backgroundColor: '#dcfce7', padding: '10px', borderRadius: '8px' },
+  error: { color: 'red', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '8px', marginBottom: '10px' },
+  exito: { color: 'green', backgroundColor: '#dcfce7', padding: '10px', borderRadius: '8px', marginBottom: '10px' },
   form: { backgroundColor: 'white', padding: '20px', borderRadius: '10px', marginBottom: '20px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', gap: '10px', maxWidth: '400px' },
   input: { padding: '8px 12px', borderRadius: '6px', border: '1px solid #cbd5e1', fontSize: '0.9rem' },
   btnPrimary: { padding: '10px', backgroundColor: '#4f46e5', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' },
   btnDanger: { padding: '5px 10px', backgroundColor: '#dc2626', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer' },
   tabla: { width: '100%', borderCollapse: 'collapse', backgroundColor: 'white', borderRadius: '10px', overflow: 'hidden', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' },
+  badge: { padding: '3px 8px', borderRadius: '12px', color: 'white', fontSize: '0.8rem' },
+  contador: { color: '#64748b', fontSize: '0.85rem', marginBottom: '10px' },
 };
 
 export default Usuarios;
