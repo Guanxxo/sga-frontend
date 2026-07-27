@@ -4,16 +4,27 @@ import { getEstadisticas } from '../services/api';
 function Dashboard() {
   const [stats, setStats] = useState(null);
   const [error, setError] = useState('');
+  const [cargando, setCargando] = useState(false);
 
-  useEffect(() => {
+  const cargar = () => {
+    setCargando(true);
+    setError('');
     getEstadisticas()
       .then(res => setStats(res.data))
-      .catch(() => setError('No se pudo conectar al backend. ¿Está corriendo el servidor?'));
-  }, []);
+      .catch(() => setError('No se pudo conectar al backend. ¿Está corriendo el servidor?'))
+      .finally(() => setCargando(false));
+  };
+
+  useEffect(() => { cargar(); }, []);
 
   return (
     <div style={styles.container}>
-      <h2 style={styles.titulo}>📊 Dashboard</h2>
+      <div style={styles.header}>
+        <h2 style={styles.titulo}>📊 Dashboard</h2>
+        <button style={styles.btnActualizar} onClick={cargar} disabled={cargando}>
+          {cargando ? '⏳ Cargando...' : '🔄 Actualizar'}
+        </button>
+      </div>
       {error && <p style={styles.error}>{error}</p>}
       {stats ? (
         <div style={styles.grid}>
@@ -57,7 +68,9 @@ function Tarjeta({ titulo, valor, color }) {
 
 const styles = {
   container: { padding: '20px' },
-  titulo: { color: '#1e293b', marginBottom: '20px' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' },
+  titulo: { color: '#1e293b', margin: 0 },
+  btnActualizar: { padding: '8px 16px', backgroundColor: '#4f46e5', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: 'bold' },
   error: { color: 'red', backgroundColor: '#fee2e2', padding: '10px', borderRadius: '8px' },
   loading: { color: '#64748b' },
   grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: '15px', marginBottom: '20px' },
