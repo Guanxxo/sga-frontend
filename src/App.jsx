@@ -11,12 +11,14 @@ import Calificaciones from './pages/Calificaciones';
 import Asistencias from './pages/Asistencias';
 import Footer from './components/Footer';
 import Estadisticas from './pages/Estadisticas';
+import Bienvenida from './pages/Bienvenida';
 
 function App() {
-  const [pagina, setPagina] = useState('dashboard');
+  const [pagina, setPagina] = useState('bienvenida');
 
   const renderPagina = () => {
     switch(pagina) {
+      case 'bienvenida': return <Bienvenida setPagina={setPagina} />;
       case 'dashboard': return <Dashboard />;
       case 'usuarios': return <Usuarios />;
       case 'estudiantes': return <Estudiantes />;

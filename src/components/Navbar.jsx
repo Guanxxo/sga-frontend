@@ -1,5 +1,6 @@
 function Navbar({ paginaActual, setPagina }) {
   const links = [
+    { id: 'bienvenida', label: '🏠 Inicio' },
     { id: 'dashboard', label: '📊 Dashboard' },
     { id: 'usuarios', label: '👤 Usuarios' },
     { id: 'estudiantes', label: '🎓 Estudiantes' },
