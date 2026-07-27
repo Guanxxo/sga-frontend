@@ -9,6 +9,7 @@ import Materias from './pages/Materias';
 import Matriculas from './pages/Matriculas';
 import Calificaciones from './pages/Calificaciones';
 import Asistencias from './pages/Asistencias';
+import Footer from './components/Footer';
 import Estadisticas from './pages/Estadisticas';
 
 function App() {
@@ -33,9 +34,12 @@ function App() {
   return (
     <div style={styles.app}>
       <Navbar paginaActual={pagina} setPagina={setPagina} />
-      <main style={styles.main}>
-        {renderPagina()}
-      </main>
+      <div style={styles.contenido}>
+        <main style={styles.main}>
+          {renderPagina()}
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 }
@@ -45,6 +49,11 @@ const styles = {
     display: 'flex',
     minHeight: '100vh',
     backgroundColor: '#f1f5f9',
+  },
+  contenido: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
   },
   main: {
     flex: 1,
