@@ -5,6 +5,7 @@ function Matriculas() {
   const [matriculas, setMatriculas] = useState([]);
   const [form, setForm] = useState({ id_estudiante: '', id_materia: '', id_periodo: '', fecha: '' });
   const [error, setError] = useState('');
+  const [filtroEstado, setFiltroEstado] = useState('todos');
   const [exito, setExito] = useState('');
 
   const cargar = () => {
@@ -25,6 +26,9 @@ function Matriculas() {
       .catch(() => setError('Error al crear matrícula. Verifica los datos.'));
   };
 
+  const matriculasFiltradas = filtroEstado === 'todos' 
+    ? matriculas 
+    : matriculas.filter(m => m.estado === filtroEstado);
   const accion = (fn, id) => {
     setError(''); setExito('');
     fn(id).then(() => { setExito('Acción realizada correctamente'); cargar(); }).catch(e => setError(e.response?.data?.detail || 'Error al realizar acción'));
@@ -50,6 +54,22 @@ function Matriculas() {
         <button style={styles.btnPrimary} onClick={handleSubmit}>Crear Matrícula</button>
       </div>
 
+    <div style={{marginBottom: '15px'}}>
+      <select style={styles.input} value={filtroEstado} onChange={e => setFiltroEstado(e.target.value)}>
+        <option value="todos">Todos los estados</option>
+        <option value="borrador">Borrador</option>
+        <option value="en_revision">En Revisión</option>
+        <option value="pendiente">Pendiente</option>
+        <option value="activa">Activa</option>
+        <option value="rechazada">Rechazada</option>
+        <option value="completada">Completada</option>
+        <option value="anulada">Anulada</option>
+      </select>
+      <span style={{marginLeft: '10px', color: '#64748b', fontSize: '0.85rem'}}>
+        Total: {matriculasFiltradas.length} matrículas
+      </span>
+    </div>
+
       <table style={styles.tabla}>
         <thead>
           <tr>
@@ -57,7 +77,7 @@ function Matriculas() {
           </tr>
         </thead>
         <tbody>
-          {matriculas.map(m => (
+          {matriculasFiltradas.map(m => (
             <tr key={m.id}>
               <td>{m.id}</td>
               <td>{m.id_estudiante}</td>
